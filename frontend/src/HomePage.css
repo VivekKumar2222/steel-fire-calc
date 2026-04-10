@@ -1,0 +1,228 @@
+/* ── Home Page ── */
+
+.home-container {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 2rem 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+  gap: 3rem;
+}
+
+/* Hero */
+.home-hero {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  /* padding-top: 2rem; */
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  text-align: center;        /* add this */
+  margin: 0 auto;            /* add this */
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.home-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  display: inline-block;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.home-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.home-heading-accent {
+  color: var(--accent-blue);
+}
+
+.home-subheading {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home-btn-primary {
+  padding: 0.65rem 1.75rem;
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.home-btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.home-btn-secondary {
+  padding: 0.65rem 1.75rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.home-btn-secondary:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-card);
+  transform: translateY(-1px);
+}
+
+/* Decorative grid */
+.home-grid-bg {
+  position: absolute;
+  right: -2rem;
+  top: 0;
+  width: 320px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.home-grid-cell {
+  border: 1px solid var(--border);
+}
+
+/* Service cards */
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.home-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.home-card:hover {
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.home-card-coming {
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+}
+
+.home-card-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.home-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.home-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.home-card-arrow {
+  margin-left: auto;
+  color: var(--accent-blue);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.home-card-badge {
+  margin-left: auto;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .home-container {
+    padding: 2rem 1.25rem;
+  }
+  .home-grid-bg {
+    display: none;
+  }
+  .home-heading {
+    font-size: 2.2rem;
+  }
+}

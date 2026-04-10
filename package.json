@@ -1,0 +1,14 @@
+{
+  "name": "steel-fire-calc",
+  "version": "1.0.0",
+  "description": "ISO 834 Steel Fire Temperature Calculator — Eurocode EN 1993-1-2",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "setup": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start:dev": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
