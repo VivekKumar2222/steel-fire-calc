@@ -6,6 +6,7 @@ import InputPanel from './components/InputPanel';
 import ResultsArea from './components/ResultsArea';
 import HomePage from './HomePage';
 import AuthModal from './components/AuthModal';
+import ParametricCalculator from './components/parametric/ParametricCalculator';
 import UserAvatar from './components/UserAvatar';
 import LoadingScreen from './components/LoadingScreen';
 
@@ -66,8 +67,10 @@ function App() {
           {/* Brand */}
           <div className="header-brand" style={{ cursor: 'pointer' }} onClick={() => navigateTo('home')}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span className="header-title">StructGuru</span>
+                {page === 'calculator'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>ISO Fire</span></>}
+                {page === 'parametric'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>Parametric Fire</span></>}
               </div>
               <div className="header-subtitle">Structural Engineering Tools</div>
             </div>
@@ -91,6 +94,14 @@ function App() {
                     <span>
                       <span className="nav-dropdown-label">ISO Fire Calculator</span>
                       <span className="nav-dropdown-sub">EN 1993-1-2 steel temperature</span>
+                    </span>
+                  </button>
+                  <button className="nav-dropdown-item"
+                    onClick={() => { navigateTo('parametric', 'Loading calculator…'); setServicesOpen(false); }}>
+                    <span className="nav-dropdown-icon">🏗️</span>
+                    <span>
+                      <span className="nav-dropdown-label">Parametric Fire Calculator</span>
+                      <span className="nav-dropdown-sub">EN 1991-1-2 Annex A</span>
                     </span>
                   </button>
                   <div className="nav-dropdown-item nav-dropdown-item--coming">
@@ -138,6 +149,10 @@ function App() {
                 onClick={() => navigateTo('calculator', 'Loading calculator…')}>
                 🔥 ISO Fire Calculator
               </button>
+              <button className="nav-mobile-item nav-mobile-subitem"
+                onClick={() => navigateTo('parametric', 'Loading calculator…')}>
+                🏗️ Parametric Fire Calculator
+              </button>
               <div className="nav-mobile-item nav-mobile-subitem nav-mobile-coming">
                 ⚙️ More coming soon <span className="nav-coming-badge">Soon</span>
               </div>
@@ -172,9 +187,8 @@ function App() {
         </div>
       </header>
 
-      {page === 'home' ? (
-        <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} />
-      ) : (
+      {page === 'home' && <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} />}
+      {page === 'calculator' && (
         <div className="main-layout">
           <InputPanel inputs={inputs} updateInput={updateInput}
             results={results} loading={loading} error={error} onCalculate={calculate} />
@@ -183,6 +197,7 @@ function App() {
           </main>
         </div>
       )}
+      {page === 'parametric' && <ParametricCalculator />}
 
       {authModal && (
         <AuthModal

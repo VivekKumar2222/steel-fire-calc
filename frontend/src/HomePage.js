@@ -43,7 +43,15 @@ function HomePage({ onNavigate }) {
           <div className="home-card-icon">🔥</div>
           <div>
             <div className="home-card-title">ISO Fire Calculator</div>
-            <div className="home-card-desc">Steel temperature under ISO 834 fire — unprotected &amp; protected sections per EN 1993-1-2</div>
+            <div className="home-card-desc">Steel temperature under ISO 834 standard fire — unprotected &amp; protected sections per EN 1993-1-2</div>
+          </div>
+          <span className="home-card-arrow">→</span>
+        </div>
+        <div className="home-card" onClick={() => onNavigate('parametric')} role="button" tabIndex={0}>
+          <div className="home-card-icon">🏗️</div>
+          <div>
+            <div className="home-card-title">Parametric Fire Calculator</div>
+            <div className="home-card-desc">Real compartment fire model with heating &amp; cooling phases per EN 1991-1-2 Annex A</div>
           </div>
           <span className="home-card-arrow">→</span>
         </div>

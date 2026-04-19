@@ -1,40 +1,47 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 const DEFAULT_INPUTS = {
-  // Fire protection
-  Cp: 1200,
-  dp: 0.01,
-  lambdaP: 0.174,
-  rhoP: 430,
+  // Compartment
+  B_room: 9, H_room: 15, H_comp: 2.9,
+  // Doors
+  n_doors: 2, W_door: 15, H_door: 1.9,
+  // Windows
+  n_windows: 1, W_win: 9, H_win: 2.9,
+  // Fire load
+  fire_mode: 'Medium',
+  qfk: 511,
+  dq2: 1, dn: 1, m: 1,
+  // Wall materials
+  wall_material: 'Normal Bricks',
+  roof_material: 'NW Concrete',
   // Section geometry (mm)
-  h: 190,
-  b: 200,
-  tw: 6.5,
-  tf: 10,
-  r1: 18,
-  // Exposure
+  h: 150, b: 160, tw: 6, tf: 9, r1: 18,
   exposure: 'All Sides',
+  // Fire protection
+  Cp: 1200, dp: 0.01, lambdaP: 0.174, rhoP: 430,
+  T0: 20,
 };
 
-export function useCalculator() {
-  const [inputs, setInputs] = useState(DEFAULT_INPUTS);
+export function useParametricCalculator() {
+  const [inputs, setInputs]   = useState(DEFAULT_INPUTS);
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError]     = useState(null);
 
   const updateInput = useCallback((key, value) => {
     setInputs(prev => ({ ...prev, [key]: value }));
   }, []);
 
   const calculate = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const payload = { ...inputs };
-      const numericKeys = ['Cp', 'dp', 'lambdaP', 'rhoP', 'h', 'b', 'tw', 'tf', 'r1'];
+      const numericKeys = ['B_room','H_room','H_comp','n_doors','W_door','H_door',
+        'n_windows','W_win','H_win','qfk','dq2','dn','m','h','b','tw','tf','r1',
+        'Cp','dp','lambdaP','rhoP','T0'];
       numericKeys.forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res = await fetch('/api/calculate', {  //https://backend.structguru.com/api/calculate
+      const res  = await fetch('/api/calculate-parametric', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -49,13 +56,10 @@ export function useCalculator() {
     }
   }, [inputs]);
 
-  // Auto-calculate whenever inputs change, debounced 300ms
   const debounceRef = useRef(null);
   useEffect(() => {
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      calculate();
-    }, 300);
+    debounceRef.current = setTimeout(calculate, 400);
     return () => clearTimeout(debounceRef.current);
   }, [inputs, calculate]);
 

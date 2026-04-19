@@ -11,12 +11,13 @@ const User              = require('./models/User');
 const OTP               = require('./models/OTP');
 const { generateOTP, sendOTPEmail } = require('./services/emailService');
 const { calculateTemperatures }     = require('./calculations');
+const { calculateParametricFire }   = require('./parametricCalculations');
 
 const app = express();
-//app.use(cors());
-app.use(cors({
-  origin: ['https://structguru.com', 'https://www.structguru.com']
-}));
+app.use(cors());
+// app.use(cors({
+//   origin: ['https://structguru.com', 'https://www.structguru.com']
+// }));
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || 'structguru-dev-secret';
@@ -167,6 +168,20 @@ app.post('/api/calculate', (req, res) => {
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
   }
+});
+
+app.post('/api/calculate-parametric', (req, res) => {
+  try {
+    const result = calculateParametricFire(req.body);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.get('/api/parametric-materials', (_, res) => {
+  const { WALL_MATERIALS } = require('./parametricCalculations');
+  res.json({ success: true, materials: Object.keys(WALL_MATERIALS) });
 });
 
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
