@@ -14,10 +14,10 @@ const { calculateTemperatures }     = require('./calculations');
 const { calculateParametricFire }   = require('./parametricCalculations');
 
 const app = express();
-app.use(cors());
-// app.use(cors({
-//   origin: ['https://structguru.com', 'https://www.structguru.com']
-// }));
+//app.use(cors());
+app.use(cors({
+  origin: ['https://structguru.com', 'https://www.structguru.com']
+}));
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || 'structguru-dev-secret';

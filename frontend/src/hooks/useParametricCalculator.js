@@ -41,7 +41,7 @@ export function useParametricCalculator() {
         'Cp','dp','lambdaP','rhoP','T0'];
       numericKeys.forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res  = await fetch('/api/calculate-parametric', {
+      const res  = await fetch('https://backend.structguru.com/api/calculate-parametric', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
