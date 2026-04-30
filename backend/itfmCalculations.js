@@ -70,19 +70,28 @@ function gasTempAtPosition(t_sec, x_pos, params) {
 
   if (Ft <= 0) return T_ROOM;
 
-  // Distance from point x to centre of current fire footprint
-  const fire_centre = Lt - 0.5 * L * Ft;
-  const dist        = Math.abs(x_pos - fire_centre);
-  const half_fire   = 0.5 * L * Ft;
+  // Fire footprint: rear edge = Lt - L*Ft, front edge = Lt
+  // When L_trail > L, Lt is clamped to L so the rear edge = L - L*Ft
+  const rear_edge  = Lt - L * Ft;   // rear of fire footprint
+  const front_edge = Lt;             // front of fire footprint (clamped to L)
 
   // Point is inside the fire footprint → near-field temperature
-  if (dist <= half_fire) return T_NF_calc;
+  if (x_pos >= rear_edge && x_pos <= front_edge) return T_NF_calc;
 
-  // Point is outside fire footprint → far-field decay formula
-  const q_current = L * Ft * W * QII;  // kW
+  // Distance to nearest edge of fire footprint (not centre)
+  // This prevents the oscillation at the compartment boundary
+  const dist_to_rear  = Math.abs(x_pos - rear_edge);
+  const dist_to_front = Math.abs(x_pos - front_edge);
+  const dist = Math.min(dist_to_rear, dist_to_front);
+
+  // Enforce minimum distance to prevent far-field formula exploding near boundary
+  const safe_dist = Math.max(dist, 0.5);
+
+  // Far-field decay formula
+  const q_current = L * Ft * W * QII;
   if (q_current <= 0) return T_ROOM;
 
-  const Tg = T_ROOM + (5.38 / H) * Math.pow(q_current / dist, 2/3);
+  const Tg = T_ROOM + (5.38 / H) * Math.pow(q_current / safe_dist, 2/3);
   return Math.min(T_NF_calc, Tg);
 }
 

@@ -1,19 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine,
 } from 'recharts';
-
-const INTERVAL_OPTIONS = [
-  { label: '2m',  maxPoints: 128   },//128-> 2min, 21.5->4min, 17.3->5min, 12.3->7min, 8.6->10min, 5.7->15min, 4.3->20min, 2.9->30min
-  { label: '4m',  maxPoints: 21.5    },
-  { label: '5m',  maxPoints: 17.3 },
-  { label: '7m',  maxPoints: 12.3  },
-  { label: '10m', maxPoints: 8.55  },
-  { label: '15m', maxPoints: 5.7   },
-  { label: '20m', maxPoints: 4.27   },
-  { label: '30m', maxPoints: 2.845  },
-];
 
 function sampleData(data, maxPoints = 300) {
   if (data.length <= maxPoints) return data;
@@ -38,23 +27,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-const btnStyle = (active) => ({
-  padding: '0.18rem 0.5rem',
-  fontSize: '0.68rem',
-  fontFamily: 'Space Mono',
-  border: '1px solid',
-  borderColor: active ? 'var(--accent-blue)' : 'var(--border)',
-  background: active ? 'rgba(56,139,253,0.12)' : 'var(--bg-input)',
-  color: active ? 'var(--accent-blue-light)' : 'var(--text-muted)',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  transition: 'all 0.15s',
-});
-
 export default function ParametricChart({ results, tmax_min }) {
-  const [maxPoints, setMaxPoints]     = useState(300);
-  const [activeLabel, setActiveLabel] = useState('2m');
-
   const chartData = useMemo(() => {
     if (!results) return [];
     return sampleData(results.map(r => ({
@@ -62,47 +35,24 @@ export default function ParametricChart({ results, tmax_min }) {
       gas: r.Tg,
       unprot: r.Ts_unprot,
       prot: r.Ts_prot,
-    })), maxPoints);
-  }, [results, maxPoints]);
+    })));
+  }, [results]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '0.75rem' }}>
-
-      {/* Legend + interval buttons — same layout as ISO chart */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-
-        {/* Left — legend */}
-        <div className="chart-legend" style={{ margin: 0 }}>
-          {[
-            { color: '#ff6b6b', label: 'Parametric Gas Temperature' },
-            { color: '#3fb950', label: 'Steel Unprotected (Eurocode)' },
-            { color: '#388bfd', label: 'Steel Protected (Eurocode)' },
-          ].map(l => (
-            <div className="legend-item" key={l.label}>
-              <div className="legend-dot" style={{ background: l.color }} />
-              <span>{l.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Right — interval buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'Space Mono', marginRight: '0.2rem' }}>
-            INTERVAL
-          </span>
-          {INTERVAL_OPTIONS.map(opt => (
-            <button
-              key={opt.label}
-              onClick={() => { setMaxPoints(opt.maxPoints); setActiveLabel(opt.label); }}
-              style={btnStyle(activeLabel === opt.label)}>
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
+      <div className="chart-legend" style={{ marginBottom: '0.25rem' }}>
+        {[
+          { color: '#ff6b6b', label: 'Parametric Gas Temperature' },
+          { color: '#3fb950', label: 'Steel Unprotected (Eurocode)' },
+          { color: '#388bfd', label: 'Steel Protected (Eurocode)' },
+        ].map(l => (
+          <div className="legend-item" key={l.label}>
+            <div className="legend-dot" style={{ background: l.color }} />
+            <span>{l.label}</span>
+          </div>
+        ))}
       </div>
 
-      {/* Chart */}
       <div className="chart-container" style={{ flex: 1, minHeight: 0 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
@@ -128,7 +78,6 @@ export default function ParametricChart({ results, tmax_min }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-
     </div>
   );
 }
