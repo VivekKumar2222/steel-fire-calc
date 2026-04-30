@@ -34,7 +34,7 @@ export function useITFMCalculator() {
         'x_position','h','b','tw','tf','r1','Cp','dp','lambdaP','rhoP','T0'];
       numericKeys.forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res  = await fetch('/api/calculate-itfm', {
+      const res  = await fetch('https://backend.structguru.com/api/calculate-itfm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

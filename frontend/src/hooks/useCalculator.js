@@ -34,7 +34,7 @@ export function useCalculator() {
       const numericKeys = ['Cp', 'dp', 'lambdaP', 'rhoP', 'h', 'b', 'tw', 'tf', 'r1'];
       numericKeys.forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res = await fetch('/api/calculate', {  //https://backend.structguru.com/api/calculate
+      const res = await fetch('https://backend.structguru.com/api/calculate', {  //https://backend.structguru.com/api/calculate
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
