@@ -5,14 +5,14 @@ import {
 } from 'recharts';
 
 const INTERVAL_OPTIONS = [
-  { label: '2m',  maxPoints: 128   },//128-> 2min, 21.5->4min, 17.3->5min, 12.3->7min, 8.6->10min, 5.7->15min, 4.3->20min, 2.9->30min
-  { label: '4m',  maxPoints: 21.5    },
-  { label: '5m',  maxPoints: 17.3 },
-  { label: '7m',  maxPoints: 12.3  },
-  { label: '10m', maxPoints: 8.55  },
-  { label: '15m', maxPoints: 5.7   },
-  { label: '20m', maxPoints: 4.27   },
-  { label: '30m', maxPoints: 2.845  },
+  { label: '2m',  maxPoints: 300   },
+  { label: '4m',  maxPoints: 35    },
+  { label: '5m',  maxPoints: 27.55 },
+  { label: '7m',  maxPoints: 19.8  },
+  { label: '10m', maxPoints: 13.8  },
+  { label: '15m', maxPoints: 9.2   },
+  { label: '20m', maxPoints: 6.9   },
+  { label: '30m', maxPoints: 4.59  },
 ];
 
 function sampleData(data, maxPoints = 300) {
@@ -38,45 +38,37 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-const btnStyle = (active) => ({
-  padding: '0.18rem 0.5rem',
-  fontSize: '0.68rem',
-  fontFamily: 'Space Mono',
-  border: '1px solid',
+const btnStyle = active => ({
+  padding: '0.18rem 0.5rem', fontSize: '0.68rem', fontFamily: 'Space Mono',
+  border: '1px solid', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.15s',
   borderColor: active ? 'var(--accent-blue)' : 'var(--border)',
-  background: active ? 'rgba(56,139,253,0.12)' : 'var(--bg-input)',
-  color: active ? 'var(--accent-blue-light)' : 'var(--text-muted)',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  transition: 'all 0.15s',
+  background:  active ? 'rgba(56,139,253,0.12)' : 'var(--bg-input)',
+  color:       active ? 'var(--accent-blue-light)' : 'var(--text-muted)',
 });
 
-export default function ParametricChart({ results, tmax_min }) {
+export default function ITFMChart({ results, fireProps, x_position, L, onPositionChange }) {
   const [maxPoints, setMaxPoints]     = useState(300);
   const [activeLabel, setActiveLabel] = useState('2m');
 
   const chartData = useMemo(() => {
     if (!results) return [];
     return sampleData(results.map(r => ({
-      t: r.timeMin,
-      gas: r.Tg,
-      unprot: r.Ts_unprot,
-      prot: r.Ts_prot,
+      t: r.timeMin, gas: r.Tg, unprot: r.Ts_unprot, prot: r.Ts_prot,
     })), maxPoints);
   }, [results, maxPoints]);
+
+  const totalMin = fireProps?.TTOTAL_min || 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '0.75rem' }}>
 
-      {/* Legend + interval buttons — same layout as ISO chart */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-
-        {/* Left — legend */}
+      {/* Top bar: legend left, interval right */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:'0.5rem' }}>
         <div className="chart-legend" style={{ margin: 0 }}>
           {[
-            { color: '#ff6b6b', label: 'Parametric Gas Temperature' },
-            { color: '#3fb950', label: 'Steel Unprotected (Eurocode)' },
-            { color: '#388bfd', label: 'Steel Protected (Eurocode)' },
+            { color: '#ff6b6b', label: 'Gas Temperature (iTFM)' },
+            { color: '#3fb950', label: 'Steel Unprotected' },
+            { color: '#388bfd', label: 'Steel Protected' },
           ].map(l => (
             <div className="legend-item" key={l.label}>
               <div className="legend-dot" style={{ background: l.color }} />
@@ -84,22 +76,40 @@ export default function ParametricChart({ results, tmax_min }) {
             </div>
           ))}
         </div>
-
-        {/* Right — interval buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'Space Mono', marginRight: '0.2rem' }}>
-            INTERVAL
-          </span>
+        <div style={{ display:'flex', alignItems:'center', gap:'0.35rem', flexWrap:'wrap' }}>
+          <span style={{ fontSize:'0.65rem', color:'var(--text-muted)', fontFamily:'Space Mono', marginRight:'0.2rem' }}>INTERVAL</span>
           {INTERVAL_OPTIONS.map(opt => (
-            <button
-              key={opt.label}
-              onClick={() => { setMaxPoints(opt.maxPoints); setActiveLabel(opt.label); }}
-              style={btnStyle(activeLabel === opt.label)}>
+            <button key={opt.label} style={btnStyle(activeLabel===opt.label)}
+              onClick={() => { setMaxPoints(opt.maxPoints); setActiveLabel(opt.label); }}>
               {opt.label}
             </button>
           ))}
         </div>
+      </div>
 
+      {/* Distance slider */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '0.75rem',
+        padding: '0.5rem 0.75rem',
+        background: 'var(--bg-input)', border: '1px solid var(--border)',
+        borderRadius: 'var(--radius)',
+      }}>
+        <span style={{ fontSize:'0.68rem', color:'var(--text-muted)', fontFamily:'Space Mono', whiteSpace:'nowrap' }}>
+          BEAM POSITION
+        </span>
+        <input
+          type="range"
+          min="0" max={L || 100} step="0.5"
+          value={x_position}
+          onChange={e => onPositionChange(parseFloat(e.target.value))}
+          style={{ flex: 1, accentColor: 'var(--accent-blue)', cursor: 'pointer' }}
+        />
+        <span style={{
+          fontSize: '0.8rem', fontFamily: 'Space Mono', fontWeight: 700,
+          color: 'var(--accent-blue-light)', minWidth: '4rem', textAlign: 'right',
+        }}>
+          x = {x_position} m
+        </span>
       </div>
 
       {/* Chart */}
@@ -116,11 +126,11 @@ export default function ParametricChart({ results, tmax_min }) {
               tick={{ fill: '#8b949e', fontSize: 11, fontFamily: 'Space Mono' }}
               tickLine={false} />
             <Tooltip content={<CustomTooltip />} />
-            {tmax_min && (
-              <ReferenceLine x={tmax_min} stroke="#f0883e" strokeDasharray="4 4"
-                label={{ value: `Peak ${tmax_min}min`, position: 'top', fill: '#f0883e', fontSize: 10 }} />
+            {totalMin > 0 && (
+              <ReferenceLine x={totalMin} stroke="#8b949e" strokeDasharray="4 4"
+                label={{ value: `Fire ends ${totalMin}min`, position: 'top', fill: '#8b949e', fontSize: 9 }} />
             )}
-            <ReferenceLine y={550} stroke="#f0883e" strokeDasharray="2 4"
+            <ReferenceLine y={550} stroke="#f0883e" strokeDasharray="4 4"
               label={{ value: '550°C', position: 'right', fill: '#f0883e', fontSize: 10 }} />
             <Line type="monotone" dataKey="gas"    stroke="#ff6b6b" strokeWidth={2} dot={false} name="Gas Temp" />
             <Line type="monotone" dataKey="unprot" stroke="#3fb950" strokeWidth={2} dot={false} name="Steel Unprotected" />

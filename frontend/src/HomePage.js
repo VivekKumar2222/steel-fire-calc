@@ -55,6 +55,14 @@ function HomePage({ onNavigate }) {
           </div>
           <span className="home-card-arrow">→</span>
         </div>
+        <div className="home-card" onClick={() => onNavigate('itfm')} role="button" tabIndex={0}>
+          <div className="home-card-icon">🚀</div>
+          <div>
+            <div className="home-card-title">iTFM Calculator</div>
+            <div className="home-card-desc">Travelling fire model — gas temperature varies by position along compartment length</div>
+          </div>
+          <span className="home-card-arrow">→</span>
+        </div>
         <div className="home-card home-card-coming">
           <div className="home-card-icon">⚙️</div>
           <div>
