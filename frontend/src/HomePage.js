@@ -63,6 +63,14 @@ function HomePage({ onNavigate }) {
           </div>
           <span className="home-card-arrow">→</span>
         </div>
+        <div className="home-card" onClick={() => onNavigate('rebar')} role="button" tabIndex={0}>
+          <div className="home-card-icon">🔩</div>
+          <div>
+            <div className="home-card-title">Rebar Temperature</div>
+            <div className="home-card-desc">1D finite difference heat conduction through concrete — rebar temperature under ISO 834 or custom fire curve</div>
+          </div>
+          <span className="home-card-arrow">→</span>
+        </div>
         <div className="home-card home-card-coming">
           <div className="home-card-icon">⚙️</div>
           <div>

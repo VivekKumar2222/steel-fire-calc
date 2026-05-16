@@ -7,7 +7,8 @@ import ResultsArea from './components/ResultsArea';
 import HomePage from './HomePage';
 import AuthModal from './components/AuthModal';
 import ParametricCalculator from './components/parametric/ParametricCalculator';
-import ITFMCalculator from './components/itfm/ITFMCalculator';
+import ITFMCalculator  from './components/itfm/ITFMCalculator';
+import RebarCalculator from './components/rebar/RebarCalculator';
 import UserAvatar from './components/UserAvatar';
 import LoadingScreen from './components/LoadingScreen';
 
@@ -73,6 +74,7 @@ function App() {
                 {page === 'calculator'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>ISO Fire</span></>}
                 {page === 'parametric'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>Parametric Fire</span></>}
                 {page === 'itfm'         && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>iTFM Calculator</span></>}
+                {page === 'rebar'        && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>Rebar Temperature</span></>}
               </div>
               <div className="header-subtitle">Structural Engineering Tools</div>
             </div>
@@ -112,6 +114,14 @@ function App() {
                     <span>
                       <span className="nav-dropdown-label">iTFM Calculator</span>
                       <span className="nav-dropdown-sub">Travelling Fire Model</span>
+                    </span>
+                  </button>
+                  <button className="nav-dropdown-item"
+                    onClick={() => { navigateTo('rebar', 'Loading calculator…'); setServicesOpen(false); }}>
+                    <span className="nav-dropdown-icon">🔩</span>
+                    <span>
+                      <span className="nav-dropdown-label">Rebar Temperature</span>
+                      <span className="nav-dropdown-sub">1D FD heat through concrete</span>
                     </span>
                   </button>
                   <div className="nav-dropdown-item nav-dropdown-item--coming">
@@ -167,6 +177,10 @@ function App() {
                 onClick={() => navigateTo('itfm', 'Loading calculator…')}>
                 🚀 iTFM Calculator
               </button>
+              <button className="nav-mobile-item nav-mobile-subitem"
+                onClick={() => navigateTo('rebar', 'Loading calculator…')}>
+                🔩 Rebar Temperature
+              </button>
               <div className="nav-mobile-item nav-mobile-subitem nav-mobile-coming">
                 ⚙️ More coming soon <span className="nav-coming-badge">Soon</span>
               </div>
@@ -212,7 +226,8 @@ function App() {
         </div>
       )}
       {page === 'parametric' && <ParametricCalculator />}
-      {page === 'itfm' && <ITFMCalculator />}
+      {page === 'itfm'  && <ITFMCalculator />}
+      {page === 'rebar' && <RebarCalculator />}
 
       {authModal && (
         <AuthModal

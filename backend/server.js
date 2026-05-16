@@ -13,6 +13,7 @@ const { generateOTP, sendOTPEmail } = require('./services/emailService');
 const { calculateTemperatures }     = require('./calculations');
 const { calculateParametricFire }   = require('./parametricCalculations');
 const { calculateITFM }             = require('./itfmCalculations');
+const { calculateRebar }            = require('./rebarCalculations');
 
 const app = express();
 // app.use(cors());
@@ -174,6 +175,15 @@ app.post('/api/calculate', (req, res) => {
 app.post('/api/calculate-parametric', (req, res) => {
   try {
     const result = calculateParametricFire(req.body);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/calculate-rebar', (req, res) => {
+  try {
+    const result = calculateRebar(req.body);
     res.json({ success: true, data: result });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
