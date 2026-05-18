@@ -16,7 +16,7 @@ function App() {
   const { inputs, updateInput, results, loading, error, calculate } = useCalculator();
   const { user, authLoading } = useAuth();
 
-  const [theme, setTheme]           = useState(() => localStorage.getItem('theme') || 'dark');
+  const [theme, setTheme]           = useState(() => localStorage.getItem('theme') || 'light');
   const [page, setPage]             = useState('home');
   const [servicesOpen, setServicesOpen] = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
@@ -69,14 +69,7 @@ function App() {
           {/* Brand */}
           <div className="header-brand" style={{ cursor: 'pointer' }} onClick={() => navigateTo('home')}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span className="header-title">StructGuru</span>
-                {page === 'calculator'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>ISO Fire</span></>}
-                {page === 'parametric'  && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>Parametric Fire</span></>}
-                {page === 'itfm'         && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>iTFM Calculator</span></>}
-                {page === 'rebar'        && <><span style={{color:'var(--border)'}}>/ </span><span style={{fontSize:'0.85rem',color:'var(--text-secondary)'}}>Rebar Temperature</span></>}
-              </div>
-              <div className="header-subtitle">Structural Engineering Tools</div>
+              <img src={require('./assets/oluefhuhfu 1.png')} alt="StructGuru" style={{ height: '26px' }} />
             </div>
           </div>
 
@@ -215,7 +208,7 @@ function App() {
         </div>
       </header>
 
-      {page === 'home' && <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} />}
+      {page === 'home' && <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} theme={theme} toggleTheme={toggleTheme} />}
       {page === 'calculator' && (
         <div className="main-layout">
           <InputPanel inputs={inputs} updateInput={updateInput}
