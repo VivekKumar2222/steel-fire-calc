@@ -26,7 +26,7 @@ export function useRebarCalculator() {
       ['dt','dz','Z','zr','totalDuration','rho','c_p','k','h_c','eps','T_amb']
         .forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res  = await fetch('https://backend.structguru.com/api/calculate/api/calculate-rebar', {
+      const res  = await fetch('https://backend.structguru.com/api/calculate-rebar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
