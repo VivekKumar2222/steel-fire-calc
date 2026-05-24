@@ -5,7 +5,7 @@ function filterByMinute(results) {
   return results.filter((_, i) => i % 12 === 0);
 }
 
-export default function RebarTable({ results, inputs = {} }) {
+export default function RebarTable({ results, inputs = {}, visibleDepths = ['base', 'rebar'] }) {
   const [showAll, setShowAll]     = useState(false);
   const [exporting, setExporting] = useState(null);
 
@@ -52,8 +52,9 @@ export default function RebarTable({ results, inputs = {} }) {
             <tr>
               <th>Time (min)</th>
               <th className="col-gas">Gas Temp Tg (°C)</th>
-              <th style={{color:'var(--color-premium)'}}>Surface Temp (°C)</th>
-              <th className="col-prot">Rebar Temp (°C)</th>
+              {visibleDepths.includes('base')  && <th style={{color:'var(--color-premium)'}}>Base / Surface (°C)</th>}
+              {visibleDepths.includes('mid')   && <th style={{color:'#a371f7'}}>Mid-depth (°C)</th>}
+              {visibleDepths.includes('rebar') && <th className="col-prot">Rebar (°C)</th>}
             </tr>
           </thead>
           <tbody>
@@ -61,8 +62,9 @@ export default function RebarTable({ results, inputs = {} }) {
               <tr key={i}>
                 <td className="mono">{row.timeMin.toFixed(2)}</td>
                 <td className="col-gas mono">{row.Tg.toFixed(1)}</td>
-                <td className="mono" style={{color:'var(--color-premium)'}}>{row.Tsurf.toFixed(1)}</td>
-                <td className="col-prot mono">{row.Trebar.toFixed(1)}</td>
+                {visibleDepths.includes('base')  && <td className="mono" style={{color:'var(--color-premium)'}}>{row.Tsurf.toFixed(1)}</td>}
+                {visibleDepths.includes('mid')   && <td className="mono" style={{color:'#a371f7'}}>{(row.Tmid ?? 0).toFixed(1)}</td>}
+                {visibleDepths.includes('rebar') && <td className="col-prot mono">{row.Trebar.toFixed(1)}</td>}
               </tr>
             ))}
           </tbody>

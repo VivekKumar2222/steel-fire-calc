@@ -75,7 +75,7 @@ export default function ITFMInputPanel({ inputs, updateInput, results, loading, 
         </div>
         <div style={{marginBottom:'0.25rem'}}>
           <div style={{fontSize:'0.7rem',color:'var(--text-secondary)',marginBottom:'0.4rem'}}>Load standard section</div>
-          <SectionPicker onSelect={handleSectionSelect}/>
+          <SectionPicker onSelect={handleSectionSelect} defaultSeries="UC Sections" defaultToLast />
         </div>
         <div style={{display:'flex',alignItems:'center',gap:'0.5rem',color:'var(--text-muted)',fontSize:'0.65rem',margin:'0.25rem 0'}}>
           <div style={{flex:1,height:'1px',background:'var(--border)'}}/>or enter manually

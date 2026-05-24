@@ -6,11 +6,11 @@ import FormulaWorkings from './FormulaWorkings';
 const TABS = [
   { id: 'Graph',    label: '📈 Graph' },
   { id: 'Table',    label: '📋 Data Table' },
-  { id: 'Formulas', label: '🧮 Formula Workings' },
 ];
 
 export default function ResultsArea({ results, inputs }) {
   const [activeTab, setActiveTab] = useState('Graph');
+  const [showFormulas, setShowFormulas] = useState(false);
 
   if (!results) {
     return (
@@ -39,6 +39,18 @@ export default function ResultsArea({ results, inputs }) {
             {tab.label}
           </button>
         ))}
+        <button
+          className="tab-btn"
+          style={{ marginLeft: 'auto', fontSize: '0.72rem', opacity: 0.65 }}
+          onClick={() => {
+            setShowFormulas(f => !f);
+            if (!showFormulas) setActiveTab('Formulas');
+            else if (activeTab === 'Formulas') setActiveTab('Graph');
+          }}
+          title={showFormulas ? 'Hide Formula Workings' : 'Show Formula Workings'}
+        >
+          {showFormulas ? '🧮 Hide' : '🧮 Formulas'}
+        </button>
       </div>
 
       {/* Panel — fills remaining height, scrolls only for Formula Workings */}
@@ -49,7 +61,7 @@ export default function ResultsArea({ results, inputs }) {
         {activeTab === 'Table' && (
           <DataTable results={results.results} isPremium={false} inputs={inputs} />
         )}
-        {activeTab === 'Formulas' && (
+        {showFormulas && activeTab === 'Formulas' && (
           <FormulaWorkings results={results} inputs={inputs} />
         )}
       </div>

@@ -21,23 +21,30 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function RebarChart({ results }) {
+const DEPTH_LINES = {
+  base:  { dataKey: 'tsurf',  name: 'Base (Surface)',  color: '#f0883e', strokeWidth: 2 },
+  mid:   { dataKey: 'tmid',   name: 'Mid-depth',       color: '#a371f7', strokeWidth: 2 },
+  rebar: { dataKey: 'trebar', name: 'Rebar',           color: '#388bfd', strokeWidth: 2 },
+};
+
+export default function RebarChart({ results, visibleDepths = ['base', 'rebar'] }) {
   const chartData = useMemo(() => {
     if (!results) return [];
     // Sample every 12 rows (1 per minute) for performance
     return results
       .filter((_, i) => i % 12 === 0 || i === results.length - 1)
-      .map(r => ({ t: r.timeMin, tg: r.Tg, tsurf: r.Tsurf, trebar: r.Trebar }));
+      .map(r => ({ t: r.timeMin, tg: r.Tg, tsurf: r.Tsurf, tmid: r.Tmid, trebar: r.Trebar }));
   }, [results]);
+
+  const legendItems = [
+    { color: '#ff6b6b', label: 'Gas Temperature (ISO 834)' },
+    ...visibleDepths.map(d => DEPTH_LINES[d]).filter(Boolean).map(l => ({ color: l.color, label: l.name })),
+  ];
 
   return (
     <div style={{ display:'flex', flexDirection:'column', height:'100%', gap:'0.75rem' }}>
       <div className="chart-legend" style={{ margin:0 }}>
-        {[
-          { color:'#ff6b6b', label:'Gas Temperature (ISO 834)' },
-          { color:'#f0883e', label:'Slab Surface (z = 0 mm)' },
-          { color:'#388bfd', label:'Rebar Temperature' },
-        ].map(l => (
+        {legendItems.map(l => (
           <div className="legend-item" key={l.label}>
             <div className="legend-dot" style={{ background:l.color }} />
             <span>{l.label}</span>
@@ -60,9 +67,15 @@ export default function RebarChart({ results }) {
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine y={500} stroke="#f0883e" strokeDasharray="4 4"
               label={{ value:'500°C rebar critical', position:'right', fill:'#f0883e', fontSize:10 }} />
-            <Line type="monotone" dataKey="tg"     stroke="#ff6b6b" strokeWidth={2} dot={false} name="Gas Temp" />
-            <Line type="monotone" dataKey="tsurf"  stroke="#f0883e" strokeWidth={2} dot={false} name="Surface" />
-            <Line type="monotone" dataKey="trebar" stroke="#388bfd" strokeWidth={2} dot={false} name="Rebar" />
+            <Line type="monotone" dataKey="tg" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Gas Temp" />
+            {visibleDepths.map(d => {
+              const cfg = DEPTH_LINES[d];
+              if (!cfg) return null;
+              return (
+                <Line key={d} type="monotone" dataKey={cfg.dataKey}
+                  stroke={cfg.color} strokeWidth={cfg.strokeWidth} dot={false} name={cfg.name} />
+              );
+            })}
           </LineChart>
         </ResponsiveContainer>
       </div>

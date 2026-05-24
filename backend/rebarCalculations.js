@@ -47,6 +47,7 @@ function calculateRebar(inputs) {
   const Fo    = k * dt / (rho * c_p * dz * dz); // Fourier number
   const i_low = Math.floor(zr / dz);          // lower rebar node index
   const f     = (zr - i_low * dz) / dz;       // interpolation fraction
+  const i_mid = Math.round(N / 2);            // mid-depth node index
 
   if (Fo > 0.5) {
     throw new Error(
@@ -91,6 +92,7 @@ function calculateRebar(inputs) {
     timeSec: 0, timeMin: 0,
     Tg:     T_amb,
     Tsurf:  T_amb,
+    Tmid:   T_amb,
     Trebar: T_amb,
   });
 
@@ -129,6 +131,7 @@ function calculateRebar(inputs) {
       timeMin: Math.round((t_sec / 60) * 100) / 100,
       Tg:      Math.round(Tg_cur   * 100) / 100,
       Tsurf:   Math.round(T[0]     * 100) / 100,
+      Tmid:    Math.round(T[i_mid] * 100) / 100,
       Trebar:  Math.round(T_rebar  * 100) / 100,
     });
 

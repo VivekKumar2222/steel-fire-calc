@@ -56,7 +56,7 @@ export default function ITFMChart({ results, fireProps, x_position, L, onPositio
         borderRadius: 'var(--radius)',
       }}>
         <span style={{ fontSize:'0.68rem', color:'var(--text-muted)', fontFamily:'Space Mono', whiteSpace:'nowrap' }}>
-          BEAM POSITION
+          FIRE POSITION
         </span>
         <input
           type="range"

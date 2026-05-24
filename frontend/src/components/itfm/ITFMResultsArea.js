@@ -4,11 +4,11 @@ import ITFMFormulas from './ITFMFormulas';
 
 const TABS = [
   { id: 'Graph',    label: '📈 Graph' },
-  { id: 'Formulas', label: '🧮 Formula Workings' },
 ];
 
 export default function ITFMResultsArea({ results, inputs, updateInput }) {
   const [activeTab, setActiveTab] = useState('Graph');
+  const [showFormulas, setShowFormulas] = useState(false);
 
   if (!results) {
     return (
@@ -34,6 +34,18 @@ export default function ITFMResultsArea({ results, inputs, updateInput }) {
             {tab.label}
           </button>
         ))}
+        <button
+          className="tab-btn"
+          style={{ marginLeft: 'auto', fontSize: '0.72rem', opacity: 0.65 }}
+          onClick={() => {
+            setShowFormulas(f => !f);
+            if (!showFormulas) setActiveTab('Formulas');
+            else if (activeTab === 'Formulas') setActiveTab('Graph');
+          }}
+          title={showFormulas ? 'Hide Formula Workings' : 'Show Formula Workings'}
+        >
+          {showFormulas ? '🧮 Hide' : '🧮 Formulas'}
+        </button>
       </div>
 
       <div className="tab-panel">
@@ -46,7 +58,7 @@ export default function ITFMResultsArea({ results, inputs, updateInput }) {
             onPositionChange={val => updateInput('x_position', val)}
           />
         )}
-        {activeTab === 'Formulas' && (
+        {showFormulas && activeTab === 'Formulas' && (
           <ITFMFormulas results={results} inputs={inputs} />
         )}
       </div>

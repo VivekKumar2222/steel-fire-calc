@@ -14,11 +14,32 @@ const SERIES_SHORT = {
   'UBP Sections': 'UBP',
 };
 
-export default function SectionPicker({ onSelect }) {
-  const [activeSeries, setActiveSeries] = useState(SERIES[0]);
+export default function SectionPicker({ onSelect, defaultSeries, defaultToLast = false }) {
+  const initialSeries = (defaultSeries && SERIES.includes(defaultSeries))
+    ? defaultSeries
+    : SERIES[0];
+
+  const [activeSeries, setActiveSeries] = useState(initialSeries);
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
+
+  // When defaultToLast, pre-select and fire the last item of the initial series
+  const [selected, setSelected] = useState(() => {
+    if (defaultToLast) {
+      const list = STEEL_SECTIONS[initialSeries] || [];
+      if (list.length > 0) return list[list.length - 1];
+    }
+    return null;
+  });
+
+  // Fire onSelect once on mount if we defaulted to a section
+  const firedDefault = React.useRef(false);
+  React.useEffect(() => {
+    if (defaultToLast && selected && !firedDefault.current) {
+      firedDefault.current = true;
+      onSelect(selected);
+    }
+  }, []); // eslint-disable-line
 
   const filtered = useMemo(() => {
     const list = STEEL_SECTIONS[activeSeries] || [];

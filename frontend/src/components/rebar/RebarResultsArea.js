@@ -8,11 +8,11 @@ const TABS = [
   { id: 'Graph',    label: '📈 Graph' },
   { id: 'Table',    label: '📋 Data Table' },
   { id: 'Diagram',  label: '🏗️ Cross-Section' },
-  { id: 'Formulas', label: '🧮 Formula Workings' },
 ];
 
 export default function RebarResultsArea({ results, inputs }) {
   const [activeTab, setActiveTab] = useState('Graph');
+  const [showFormulas, setShowFormulas] = useState(false);
 
   if (!results) {
     return (
@@ -38,13 +38,25 @@ export default function RebarResultsArea({ results, inputs }) {
             {tab.label}
           </button>
         ))}
+        <button
+          className="tab-btn"
+          style={{ marginLeft: 'auto', fontSize: '0.72rem', opacity: 0.65 }}
+          onClick={() => {
+            setShowFormulas(f => !f);
+            if (!showFormulas) setActiveTab('Formulas');
+            else if (activeTab === 'Formulas') setActiveTab('Graph');
+          }}
+          title={showFormulas ? 'Hide Formula Workings' : 'Show Formula Workings'}
+        >
+          {showFormulas ? '🧮 Hide' : '🧮 Formulas'}
+        </button>
       </div>
 
       <div className="tab-panel">
-        {activeTab === 'Graph'    && <RebarChart   results={results.results} />}
-        {activeTab === 'Table'    && <RebarTable   results={results.results} inputs={inputs} />}
+        {activeTab === 'Graph'    && <RebarChart   results={results.results} visibleDepths={inputs.visibleDepths || ['base','rebar']} />}
+        {activeTab === 'Table'    && <RebarTable   results={results.results} inputs={inputs} visibleDepths={inputs.visibleDepths || ['base','rebar']} />}
         {activeTab === 'Diagram'  && <RebarDiagram inputs={inputs} finalProfile={results.finalProfile} />}
-        {activeTab === 'Formulas' && <RebarFormulas results={results} inputs={inputs} />}
+        {showFormulas && activeTab === 'Formulas' && <RebarFormulas results={results} inputs={inputs} />}
       </div>
     </div>
   );

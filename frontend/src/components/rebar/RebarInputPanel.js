@@ -125,6 +125,48 @@ export default function RebarInputPanel({ inputs, updateInput, results, loading,
         )}
       </div>
 
+      {/* Depth visibility checkboxes */}
+      <div className="input-section">
+        <div className="section-label">Show Depths</div>
+        <div style={{ fontSize:'0.7rem', color:'var(--text-muted)', marginBottom:'0.5rem' }}>
+          Choose which depths appear in the chart and table
+        </div>
+        {[
+          { key: 'base',  label: 'Base',  sub: 'fire-exposed surface' },
+          { key: 'mid',   label: 'Mid',   sub: 'slab mid-depth' },
+          { key: 'rebar', label: 'Rebar', sub: 'at rebar cover' },
+        ].map(({ key, label, sub }) => {
+          const active = (inputs.visibleDepths || ['base','rebar']).includes(key);
+          return (
+            <label key={key} style={{
+              display:'flex', alignItems:'center', gap:'0.6rem',
+              padding:'0.45rem 0.6rem', marginBottom:'0.3rem',
+              cursor:'pointer', borderRadius:'var(--radius)',
+              border:`1px solid ${active ? 'var(--accent-blue)' : 'var(--border)'}`,
+              background: active ? 'rgba(56,139,253,0.08)' : 'transparent',
+              transition:'border-color 0.15s, background 0.15s',
+            }}>
+              <input
+                type="checkbox"
+                checked={active}
+                style={{ accentColor:'var(--accent-blue)', cursor:'pointer' }}
+                onChange={() => {
+                  const current = inputs.visibleDepths || ['base','rebar'];
+                  const next = active
+                    ? current.filter(d => d !== key)
+                    : [...current, key];
+                  if (next.length > 0) updateInput('visibleDepths', next);
+                }}
+              />
+              <span style={{ display:'flex', flexDirection:'column', gap:'1px' }}>
+                <span style={{ fontSize:'0.8rem', fontWeight:600, color:'var(--text-primary)' }}>{label}</span>
+                <span style={{ fontSize:'0.65rem', color:'var(--text-muted)' }}>{sub}</span>
+              </span>
+            </label>
+          );
+        })}
+      </div>
+
       {/* Error */}
       {error && <div className="error-alert"><span>⚠</span><span>{error}</span></div>}
 

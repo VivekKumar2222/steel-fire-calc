@@ -6,6 +6,7 @@ const DEFAULT_INPUTS = {
   rho: 2300, c_p: 900, k: 1.4, h_c: 25, eps: 0.7, T_amb: 20,
   isoMode: 'auto',
   customTg: [],
+  visibleDepths: ['base', 'rebar'],  // 'base' | 'mid' | 'rebar'
 };
 
 export function useRebarCalculator() {
@@ -25,7 +26,7 @@ export function useRebarCalculator() {
       ['dt','dz','Z','zr','totalDuration','rho','c_p','k','h_c','eps','T_amb']
         .forEach(k => { payload[k] = parseFloat(payload[k]); });
 
-      const res  = await fetch('https://backend.structguru.com/api/calculate-rebar', {
+      const res  = await fetch('https://backend.structguru.com/api/calculate/api/calculate-rebar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
