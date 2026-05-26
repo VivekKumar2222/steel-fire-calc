@@ -13,10 +13,11 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
           <div className="hp-hero-left">
             <span className="hp-pill">Home</span>
             <h1 className="hp-hero-title">
-              Structural Design<br />
-              Partner. <span className="hp-orange">Accurate</span> &amp;<br />
+              Structural Engineering<br />
+              tools for <span className="hp-orange">Accurate</span> &amp;<br />
               <span className="hp-orange">Instant</span> Calculations
             </h1>
+            <h3>Fire . Steel . RCC. Timber</h3>
             <p className="hp-hero-sub">
               Accurate structural calculators built for engineers who need answers fast — not theory.
             </p>
@@ -94,20 +95,22 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
               </button>
             </div>
 
-            {/* More */}
-            <div className="hp-svc-card hp-svc-card--more">
-              <div className="hp-svc-icon">⚙️</div>
+            {/* Rebar */}
+            <div className="hp-svc-card">
+              <div className="hp-svc-icon">🔩</div>
               <div className="hp-svc-top">
-                <span className="hp-svc-name">View More Services</span>
+                <span className="hp-svc-name">Rebar Calculator</span>
+                <span className="hp-svc-badge">StructGuru RCC</span>
               </div>
               <p className="hp-svc-desc">
-                View more Structural calculation tools
+                Reinforcement bar area, spacing &amp; count — instant results for beams, slabs &amp; columns per Eurocode.
               </p>
-              <button className="hp-svc-btn-ghost" onClick={() => onNavigate('rebar')}>
-                View more &rsaquo;
+              <button className="hp-svc-btn" onClick={() => onNavigate('rebar')}>
+                Start &rsaquo;
               </button>
             </div>
           </div>
+          <p style={{ textAlign: 'center', textDecoration: 'underline', marginTop: '4%' }}>View more</p>
         </div>
       </section>
 
@@ -283,9 +286,9 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
             <div className="hp-footer-logo">
   <img src={require('./assets/oluefhuhfu 1.png')} alt="StructGuru" style={{ height: '32px' }} />
 </div>
-            <div className="hp-footer-address">
+            {/* <div className="hp-footer-address">
               Matraman St., 24122, LA<br />(+21) 231641
-            </div>
+            </div> */}
             <div className="hp-footer-social">
               <span className="hp-social-icon">f</span>
               <span className="hp-social-icon">in</span>
