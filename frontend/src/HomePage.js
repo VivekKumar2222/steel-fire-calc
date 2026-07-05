@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 
 export default function HomePage({ onNavigate, theme, toggleTheme }) {
   const [pricingTab, setPricingTab] = useState('monthly');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="hp">
@@ -43,15 +52,15 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
       {/* ── SERVICES ─────────────────────────────────────────────── */}
       <section className="hp-section">
         <div className="hp-section-inner">
-          <span className="hp-pill">Service</span>
-          <h2 className="hp-section-title">The ultimate Service we serve</h2>
-          <p className="hp-section-sub">
+          <span className="hp-pill reveal">Service</span>
+          <h2 className="hp-section-title reveal reveal-delay-1">The ultimate Service we serve</h2>
+          <p className="hp-section-sub reveal reveal-delay-2">
             To empower businesses of all sizes to expand their reach in international markets with confidence.
           </p>
 
           <div className="hp-services-grid">
             {/* ISO */}
-            <div className="hp-svc-card">
+            <div className="hp-svc-card reveal reveal-delay-1">
               <div className="hp-svc-icon">🔥</div>
               <div className="hp-svc-top">
                 <span className="hp-svc-name">ISO Steel Fire Calculator</span>
@@ -66,7 +75,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
             </div>
 
             {/* Parametric */}
-            <div className="hp-svc-card">
+            <div className="hp-svc-card reveal reveal-delay-2">
               <div className="hp-svc-icon">🏗️</div>
               <div className="hp-svc-top">
                 <span className="hp-svc-name">Parametric Fire Calculator</span>
@@ -81,7 +90,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
             </div>
 
             {/* iTFM */}
-            <div className="hp-svc-card">
+            <div className="hp-svc-card reveal reveal-delay-3">
               <div className="hp-svc-icon">🚀</div>
               <div className="hp-svc-top">
                 <span className="hp-svc-name">iTFM Calculator</span>
@@ -96,7 +105,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
             </div>
 
             {/* Rebar */}
-            <div className="hp-svc-card">
+            <div className="hp-svc-card reveal reveal-delay-4">
               <div className="hp-svc-icon">🔩</div>
               <div className="hp-svc-top">
                 <span className="hp-svc-name">Rebar Calculator</span>
@@ -117,14 +126,14 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
       {/* ── FEATURES ─────────────────────────────────────────────── */}
       <section className="hp-section hp-section">
         <div className="hp-section-inner">
-          <h2 className="hp-section-title hp-center">See what set us apart</h2>
-          <p className="hp-section-sub hp-center">
+          <h2 className="hp-section-title hp-center reveal">See what set us apart</h2>
+          <p className="hp-section-sub hp-center reveal reveal-delay-1">
             See what set our calculators apart from rest. With features like 292 Steel sections,
             EN 3 Eurocode standard, instant calculations etc.
           </p>
 
           <div className="hp-features-grid">
-            <div className="hp-feature-card">
+            <div className="hp-feature-card reveal reveal-delay-1">
               <div className="hp-feature-preview">
   <img src={require('./assets/image03.png')} alt="292 Steel sections" className="hp-feature-img" />
 </div>
@@ -134,7 +143,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
               </div>
             </div>
 
-            <div className="hp-feature-card">
+            <div className="hp-feature-card reveal reveal-delay-2">
               <div className="hp-feature-preview">
   <img src={require('./assets/image04.png')} alt="EN 3 Eurocode standard" className="hp-feature-img" />
 </div>
@@ -144,7 +153,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
               </div>
             </div>
 
-            <div className="hp-feature-card">
+            <div className="hp-feature-card reveal reveal-delay-3">
               <div className="hp-feature-preview">
   <img src={require('./assets/image05.png')} alt="Instant Calculations" className="hp-feature-img" />
 </div>
@@ -171,9 +180,9 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
       {/* ── PRICING ──────────────────────────────────────────────── */}
       <section className="hp-section">
         <div className="hp-section-inner">
-          <span className="hp-pill">Pricing</span>
-          <h2 className="hp-section-title">Our Pricing</h2>
-          <p className="hp-section-sub">
+          <span className="hp-pill reveal">Pricing</span>
+          <h2 className="hp-section-title reveal reveal-delay-1">Our Pricing</h2>
+          <p className="hp-section-sub reveal reveal-delay-2">
             Transparent pricing based on services, features, and visibility. Choose monthly or yearly
             plan and pay only for what your projects demand.
           </p>
@@ -190,7 +199,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
 
           <div className="hp-pricing-list">
             {/* Free */}
-            <div className="hp-plan-row">
+            <div className="hp-plan-row reveal reveal-delay-1">
               <div className="hp-plan-info">
                 <div className="hp-plan-name">Free Plan</div>
                 <div className="hp-plan-desc">Start free, no commitment. Includes access to basic calculators and limited platform features, with ads shown across your experience.</div>
@@ -203,7 +212,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
             <div className="hp-plan-divider" />
 
             {/* Standard */}
-            <div className="hp-plan-row">
+            <div className="hp-plan-row reveal reveal-delay-2">
               <div className="hp-plan-info">
                 <div className="hp-plan-name">
                   Standard Plan <span className="hp-recommend">Recommend</span>
@@ -226,7 +235,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
           </div>
 
           {/* Professional */}
-<div className="hp-plan-pro">
+<div className="hp-plan-pro reveal reveal-delay-3">
   <div className="hp-plan-pro-top">
     <div className="hp-plan-pro-top-left">
       <div className="hp-plan-name" style={{color:'white', marginBottom:'8px'}}>Professional Plan</div>

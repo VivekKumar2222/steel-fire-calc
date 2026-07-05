@@ -9,6 +9,7 @@ import AuthModal from './components/AuthModal';
 import ParametricCalculator from './components/parametric/ParametricCalculator';
 import ITFMCalculator  from './components/itfm/ITFMCalculator';
 import RebarCalculator from './components/rebar/RebarCalculator';
+import BeamCalculator  from './components/beam/BeamCalculator';
 import UserAvatar from './components/UserAvatar';
 import LoadingScreen from './components/LoadingScreen';
 
@@ -117,6 +118,14 @@ function App() {
                       <span className="nav-dropdown-sub">1D FD heat through concrete</span>
                     </span>
                   </button>
+                  <button className="nav-dropdown-item"
+                    onClick={() => { navigateTo('beam', 'Loading calculator…'); setServicesOpen(false); }}>
+                    <span className="nav-dropdown-icon">📐</span>
+                    <span>
+                      <span className="nav-dropdown-label">Beam Analysis</span>
+                      <span className="nav-dropdown-sub">SFD, BMD &amp; Deflection (FEM)</span>
+                    </span>
+                  </button>
                   <div className="nav-dropdown-item nav-dropdown-item--coming">
                     <span className="nav-dropdown-icon">⚙️</span>
                     <span>
@@ -174,6 +183,10 @@ function App() {
                 onClick={() => navigateTo('rebar', 'Loading calculator…')}>
                 🔩 Rebar Temperature
               </button>
+              <button className="nav-mobile-item nav-mobile-subitem"
+                onClick={() => navigateTo('beam', 'Loading calculator…')}>
+                📐 Beam Analysis
+              </button>
               <div className="nav-mobile-item nav-mobile-subitem nav-mobile-coming">
                 ⚙️ More coming soon <span className="nav-coming-badge">Soon</span>
               </div>
@@ -221,6 +234,7 @@ function App() {
       {page === 'parametric' && <ParametricCalculator />}
       {page === 'itfm'  && <ITFMCalculator />}
       {page === 'rebar' && <RebarCalculator />}
+      {page === 'beam'  && <BeamCalculator />}
 
       {authModal && (
         <AuthModal
