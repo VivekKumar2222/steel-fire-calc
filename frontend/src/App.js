@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+
 import './index.css';
 import { useCalculator } from './hooks/useCalculator';
 import { useAuth } from './hooks/useAuth';
 import InputPanel from './components/InputPanel';
 import ResultsArea from './components/ResultsArea';
 import HomePage from './HomePage';
+import AboutPage from './AboutPage';
 import AuthModal from './components/AuthModal';
 import ParametricCalculator from './components/parametric/ParametricCalculator';
 import ITFMCalculator  from './components/itfm/ITFMCalculator';
@@ -12,12 +14,12 @@ import RebarCalculator from './components/rebar/RebarCalculator';
 import BeamCalculator  from './components/beam/BeamCalculator';
 import UserAvatar from './components/UserAvatar';
 import LoadingScreen from './components/LoadingScreen';
+import ChatBot from './components/ChatBot';
 
 function App() {
   const { inputs, updateInput, results, loading, error, calculate } = useCalculator();
   const { user, authLoading } = useAuth();
 
-  const [theme, setTheme]           = useState(() => localStorage.getItem('theme') || 'light');
   const [page, setPage]             = useState('home');
   const [servicesOpen, setServicesOpen] = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
@@ -25,12 +27,10 @@ function App() {
   const [pageLoading, setPageLoading] = useState(false);
   const [loadMsg, setLoadMsg]       = useState('');
 
+  // Lock the app to light mode.
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
+  }, []);
 
   useEffect(() => {
     const handler = () => setServicesOpen(false);
@@ -138,7 +138,8 @@ function App() {
               )}
             </div>
 
-            <a href="#about" className="nav-desktop">About</a>
+            <a href="#about" className="nav-desktop"
+              onClick={e => { e.preventDefault(); navigateTo('about', 'Loading about…'); }}>About</a>
 
             {/* Auth — desktop only */}
             {user ? (
@@ -149,11 +150,6 @@ function App() {
                 <button className="nav-signup-btn" onClick={() => setAuthModal('signup')}>Sign Up</button>
               </div>
             )}
-
-            <button className="theme-toggle" onClick={toggleTheme}
-              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
 
             <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu">
@@ -190,7 +186,8 @@ function App() {
               <div className="nav-mobile-item nav-mobile-subitem nav-mobile-coming">
                 ⚙️ More coming soon <span className="nav-coming-badge">Soon</span>
               </div>
-              <a href="#about" className="nav-mobile-item" onClick={() => setMenuOpen(false)}>About</a>
+              <a href="#about" className="nav-mobile-item"
+                onClick={e => { e.preventDefault(); navigateTo('about', 'Loading about…'); }}>About</a>
 
               {/* Auth in mobile menu */}
               {!user && (
@@ -221,7 +218,8 @@ function App() {
         </div>
       </header>
 
-      {page === 'home' && <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} theme={theme} toggleTheme={toggleTheme} />}
+      {page === 'home' && <HomePage onNavigate={dest => navigateTo(dest, 'Loading…')} />}
+      {page === 'about' && <AboutPage onNavigate={dest => navigateTo(dest, 'Loading…')} />}
       {page === 'calculator' && (
         <div className="main-layout">
           <InputPanel inputs={inputs} updateInput={updateInput}
@@ -243,6 +241,9 @@ function App() {
           onSuccess={handleAuthSuccess}
         />
       )}
+
+      {/* Site-wide chat assistant — hidden while the auth modal is open so OTP isn't covered */}
+      {!authModal && <ChatBot />}
     </div>
   );
 }

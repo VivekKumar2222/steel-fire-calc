@@ -219,6 +219,19 @@ to:
 Backend: set `PORT` environment variable or change in `server.js`
 Frontend proxy: update `"proxy"` in `frontend/package.json`
 
+### AI Chatbot (bottom-right bubble)
+
+The site includes a small chat assistant fixed to the bottom-right of every page. It is powered by the free [Groq](https://console.groq.com/keys) API (model: `llama-3.3-70b-versatile` by default).
+
+Configuration (`backend/.env`):
+
+```
+GROQ_API_KEY=gsk_…                # required — leave blank to disable the bot
+GROQ_MODEL=llama-3.3-70b-versatile  # optional override
+```
+
+The browser talks to `POST /api/chat` on this server; the key never leaves the backend. Requests are rate-limited to 30 / 10 min per IP. The assistant is pre-loaded with context about the StructGuru calculators (ISO 834, EN 1993-1-2, EN 1991-1-2 parametric, iTFM, rebar 1D FD, beam SFD/BMD). Conversation history is kept in `localStorage` (`sg_chat_history`, max 40 messages) and cleared with the ⟲ button.
+
 ---
 
 ## 🔧 API Reference

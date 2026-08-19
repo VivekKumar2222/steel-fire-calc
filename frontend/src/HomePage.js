@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 
-export default function HomePage({ onNavigate, theme, toggleTheme }) {
+export default function HomePage({ onNavigate }) {
   const [pricingTab, setPricingTab] = useState('monthly');
 
   useEffect(() => {
@@ -271,7 +271,7 @@ export default function HomePage({ onNavigate, theme, toggleTheme }) {
         <div className="hp-footer-inner">
           <div className="hp-footer-col">
             <div className="hp-footer-heading">Home</div>
-            <a className="hp-footer-link" href="#about">About</a>
+            <a className="hp-footer-link" onClick={() => onNavigate('about')} href="#">About</a>
             <a className="hp-footer-link" href="#service">Service</a>
             <a className="hp-footer-link" href="#testimonials">Testimonials</a>
           </div>

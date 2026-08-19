@@ -86,7 +86,7 @@ export function useBeamCalculator() {
         })),
       };
 
-      const res  = await fetch('/api/calculate-beam', {
+      const res  = await fetch('https://backend.structguru.com/api/calculate-beam', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload),
